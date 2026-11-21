@@ -1,10 +1,13 @@
-/* MS Mobile Taksit — search, camera scan, installment tables */
+/* MS Mobile Taksit + Stok Sayımı */
 "use strict";
 
 const BANKS = ["Diğer Kartlar"];
 const ORAN = { 1: 3.70, 2: 6.73, 3: 8.66, 4: 10.54, 5: 12.46, 6: 14.24, 7: 15.92, 8: 17.84, 9: 19.78, 10: 21.55, 11: 23.63, 12: 25.40 };
 const HINT_POSSIBLE_FORMATS = 2;
 const HINT_TRY_HARDER = 3;
+const SAYIM_KEY = "msMobileSayim.v1";
+const HINT_TAKSIT = "Etiketteki IMEI barkodunu beyaz çerçevenin içine hizalayın. İzin istenirse Safari’de İzin Ver’e dokunun.";
+const HINT_SAYIM = "Kamerayı açık tutun; her cihazı beyaz çerçevenin içine hizalayın. Aynı cihazı tekrar okutursanız uyarı verir.";
 
 const el = (id) => document.getElementById(id);
 const $stockCount = el("stockCount");
@@ -23,6 +26,19 @@ const $manualToggle = el("manualToggle");
 const $manualBox = el("manualBox");
 const $manualPrice = el("manualPrice");
 const $manualTables = el("manualTables");
+const $pageTag = el("pageTag");
+const $scanHint = el("scanHint");
+const $sayimPanel = el("sayimPanel");
+const $taksitExtra = el("taksitExtra");
+const $taksitFooter = el("taksitFooter");
+const $modeTaksit = el("modeTaksit");
+const $modeSayim = el("modeSayim");
+const $sayimProgress = el("sayimProgress");
+const $sayimExtra = el("sayimExtra");
+const $sayimBar = el("sayimBar");
+const $sayimLists = el("sayimLists");
+const $toast = el("toast");
+const $confirmModal = el("confirmModal");
 
 let products = [];
 let selected = null;
@@ -35,6 +51,13 @@ let scanCanvas = null;
 let wakeLock = null;
 let audioCtx = null;
 let lastScan = { text: "", at: 0 };
+let mode = "taksit";
+let toastTimer = null;
+let sayim = emptySayim();
+
+function emptySayim() {
+  return { startedAt: null, counted: {}, unknown: {} };
+}
 
 function taksitler(_bank) {
   return Array.from({ length: 9 }, (_, i) => i + 1);
@@ -153,8 +176,9 @@ function renderResults() {
     return;
   }
   if (selected.kind === "list") {
+    const heading = mode === "sayim" ? `${selected.hits.length} sonuç, sayılacak olanı seçin` : `${selected.hits.length} sonuç, birini seçin`;
     $results.innerHTML = `<section class="card">
-      <h2>${selected.hits.length} sonuç, birini seçin</h2>
+      <h2>${heading}</h2>
       <ul class="pick">${selected.hits.map((p, i) => `
         <li><button type="button" data-pick="${i}">
           <span class="name">${escapeHtml(p.name)}</span>
@@ -162,12 +186,17 @@ function renderResults() {
         </button></li>`).join("")}</ul>
     </section>`;
     $results.querySelectorAll("[data-pick]").forEach((btn) => {
-      btn.addEventListener("click", () => selectProduct(selected.hits[Number(btn.dataset.pick)]));
+      btn.addEventListener("click", () => {
+        const hit = selected.hits[Number(btn.dataset.pick)];
+        if (mode === "sayim") markCounted(hit, "manual");
+        else selectProduct(hit);
+      });
     });
     return;
   }
 
   const p = selected.product;
+  const d = Number(discount) || 0;
   $results.innerHTML = `<section class="card" id="deviceCard">
     <h2 class="device-name">${escapeHtml(p.name)}</h2>
     <div class="props">
@@ -213,6 +242,10 @@ function selectProduct(p) {
 }
 
 function showHits(hits, missText) {
+  if (mode === "sayim") {
+    handleSayimHits(hits, missText);
+    return;
+  }
   if (hits.length === 1) {
     selectProduct(hits[0]);
     return;
@@ -256,8 +289,9 @@ async function loadStock() {
     const cur = selected.product;
     const fresh = products.find((p) => p.code === cur.code && p.imei === cur.imei) || products.find((p) => p.code === cur.code);
     if (fresh) selected.product = fresh;
-    renderResults();
+    if (mode === "taksit") renderResults();
   }
+  if (mode === "sayim") renderSayim();
 }
 
 function primeAudio() {
@@ -285,6 +319,37 @@ function beep() {
     o.stop(t + 0.13);
   } catch (_) { /* ignore */ }
   if (navigator.vibrate) navigator.vibrate(80);
+}
+
+function beepWarn() {
+  try {
+    if (!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "triangle";
+    o.frequency.value = 420;
+    g.gain.value = 0.06;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    const t = audioCtx.currentTime;
+    o.start(t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    o.stop(t + 0.2);
+  } catch (_) { /* ignore */ }
+  if (navigator.vibrate) navigator.vibrate([40, 40, 40]);
+}
+
+function showToast(kind, text) {
+  if (!$toast) return;
+  $toast.className = "toast " + kind + " show";
+  $toast.textContent = text;
+  document.body.classList.remove("flash-good", "flash-warn");
+  document.body.classList.add(kind === "good" ? "flash-good" : "flash-warn");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    $toast.classList.remove("show");
+    document.body.classList.remove("flash-good", "flash-warn");
+  }, 1600);
 }
 
 async function requestWakeLock() {
@@ -332,7 +397,6 @@ function decodeVideoBand() {
   const vw = $video.videoWidth;
   const vh = $video.videoHeight;
   if (!vw || !vh) return;
-  // CSS guide is a centered horizontal window; crop the same region of the frame.
   const bandH = Math.max(120, Math.round(vh * 0.34));
   const sy = Math.max(0, Math.round((vh - bandH) / 2));
   const sx = Math.round(vw * 0.05);
@@ -363,6 +427,10 @@ function onDecoded(text) {
   if (compact && compact === lastScan.text && now - lastScan.at < 2000) return;
   lastScan = { text: compact, at: now };
   const hits = findByScan(compact);
+  if (mode === "sayim") {
+    handleSayimHits(hits, compact, { fromScan: true });
+    return;
+  }
   beep();
   if (hits.length) {
     showHits(hits, "");
@@ -456,18 +524,302 @@ function renderManual() {
   $manualTables.innerHTML = mp > 0 ? bankTablesHtml(mp) : "";
 }
 
+/* ---------- Stok sayımı ---------- */
+
+function loadSayim() {
+  try {
+    const raw = localStorage.getItem(SAYIM_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== "object") return;
+    sayim = {
+      startedAt: data.startedAt || null,
+      counted: data.counted && typeof data.counted === "object" ? data.counted : {},
+      unknown: data.unknown && typeof data.unknown === "object" ? data.unknown : {},
+    };
+    if (data.mode === "sayim" || data.mode === "taksit") mode = data.mode;
+  } catch (_) { /* ignore corrupt storage */ }
+}
+
+function saveSayim() {
+  try {
+    localStorage.setItem(SAYIM_KEY, JSON.stringify({
+      mode,
+      startedAt: sayim.startedAt,
+      counted: sayim.counted,
+      unknown: sayim.unknown,
+    }));
+  } catch (_) { /* quota / private mode */ }
+}
+
+function fmtTime(iso) {
+  if (!iso) return "";
+  try {
+    return new Date(iso).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+  } catch (_) {
+    return iso;
+  }
+}
+
+function countedInStock() {
+  return products.filter((p) => sayim.counted[p.code]);
+}
+function missingProducts() {
+  return products.filter((p) => !sayim.counted[p.code]);
+}
+function unknownEntries() {
+  return Object.keys(sayim.unknown).sort().map((k) => sayim.unknown[k]);
+}
+
+function markCounted(p, method) {
+  if (!p || !p.code) return;
+  if (!sayim.startedAt) sayim.startedAt = new Date().toISOString();
+  if (sayim.counted[p.code]) {
+    beepWarn();
+    showToast("warn", "Bu cihaz zaten sayıldı");
+    setMsg($searchMsg, "warn", "Zaten sayıldı: " + p.name);
+    setMsg($camMsg, "warn", "Zaten sayıldı");
+    renderSayim();
+    saveSayim();
+    $q.value = "";
+    selected = null;
+    $results.innerHTML = "";
+    return;
+  }
+  sayim.counted[p.code] = {
+    code: p.code,
+    name: p.name,
+    imei: p.imei || "",
+    at: new Date().toISOString(),
+    method: method || "scan",
+  };
+  beep();
+  showToast("good", "Sayıldı: " + p.name);
+  setMsg($searchMsg, "good", "Sayıldı: " + p.name);
+  setMsg($camMsg, "good", "Sayıldı");
+  $q.value = "";
+  selected = null;
+  $results.innerHTML = "";
+  saveSayim();
+  renderSayim();
+}
+
+function markUnknown(raw) {
+  const key = compactDigits(raw) || String(raw).trim();
+  if (!key) return;
+  if (!sayim.startedAt) sayim.startedAt = new Date().toISOString();
+  const prev = sayim.unknown[key];
+  if (prev) {
+    prev.times = (prev.times || 1) + 1;
+    prev.lastAt = new Date().toISOString();
+    beepWarn();
+    showToast("warn", "Bu barkod zaten kaydedildi (stokta yok)");
+    setMsg($searchMsg, "warn", "Stokta yok, daha önce kaydedildi: " + key);
+  } else {
+    sayim.unknown[key] = { raw: key, times: 1, lastAt: new Date().toISOString() };
+    beepWarn();
+    showToast("bad", "Stokta yok: " + key);
+    setMsg($searchMsg, "warn", "Fazla / bilinmeyen: " + key);
+  }
+  setMsg($camMsg, "warn", "Stokta yok");
+  $q.value = "";
+  selected = null;
+  $results.innerHTML = "";
+  saveSayim();
+  renderSayim();
+}
+
+function handleSayimHits(hits, missText, opts) {
+  const fromScan = opts && opts.fromScan;
+  if (hits.length === 1) {
+    markCounted(hits[0], fromScan ? "scan" : "manual");
+    return;
+  }
+  if (hits.length > 1) {
+    selected = { kind: "list", hits };
+    renderResults();
+    setMsg($searchMsg, "", "");
+    return;
+  }
+  if (fromScan) {
+    markUnknown(missText || lastScan.text);
+    return;
+  }
+  const raw = ($q.value || missText || "").trim();
+  const compact = compactDigits(raw);
+  if (compact && (/^\d{8,}$/.test(compact) || /^ST\d+/i.test(compact))) {
+    markUnknown(compact);
+    return;
+  }
+  selected = { kind: "miss", message: missText || "Cihaz bulunamadı" };
+  renderResults();
+}
+
+function renderSayim() {
+  const total = products.length;
+  const counted = countedInStock();
+  const missing = missingProducts();
+  const unknown = unknownEntries();
+  $sayimProgress.textContent = `Sayılan ${counted.length} / ${total}`;
+  const pct = total ? Math.round((counted.length / total) * 100) : 0;
+  $sayimBar.style.width = pct + "%";
+  $sayimExtra.textContent = unknown.length
+    ? `Eksik ${missing.length} · Fazla / bilinmeyen ${unknown.length}`
+    : (missing.length ? `Eksik ${missing.length}` : (total ? "Sayım tamam" : ""));
+
+  const countedRows = counted.slice().sort((a, b) => (sayim.counted[b.code].at || "").localeCompare(sayim.counted[a.code].at || ""));
+  $sayimLists.innerHTML = `
+    <div class="sayim-sec">
+      <h3>Sayılan <span class="n">${counted.length}</span></h3>
+      ${countedRows.length ? `<ul class="sayim-list">${countedRows.map((p) => {
+        const rec = sayim.counted[p.code];
+        return `<li>
+          <div><span class="name">${escapeHtml(p.name)}</span>
+          <span class="sub">${escapeHtml(p.code)}${p.imei ? " · " + escapeHtml(p.imei) : ""}${rec && rec.at ? " · " + escapeHtml(fmtTime(rec.at)) : ""}</span></div>
+        </li>`;
+      }).join("")}</ul>` : `<p class="hint">Henüz sayılan cihaz yok.</p>`}
+    </div>
+    <div class="sayim-sec">
+      <h3>Eksik <span class="n">${missing.length}</span></h3>
+      ${missing.length ? `<ul class="sayim-list">${missing.map((p) => `
+        <li>
+          <div><span class="name">${escapeHtml(p.name)}</span>
+          <span class="sub">${escapeHtml(p.code)}${p.imei ? " · " + escapeHtml(p.imei) : (p.imei === "" ? " · IMEI yok, dokunarak işaretleyin" : "")}</span></div>
+          <button type="button" class="btn mark" data-mark="${escapeHtml(p.code)}">Say</button>
+        </li>`).join("")}</ul>` : `<p class="hint">Eksik cihaz kalmadı.</p>`}
+    </div>
+    <div class="sayim-sec">
+      <h3>Fazla / Bilinmeyen <span class="n">${unknown.length}</span></h3>
+      ${unknown.length ? `<ul class="sayim-list">${unknown.map((u) => `
+        <li>
+          <div><span class="name">${escapeHtml(u.raw)}</span>
+          <span class="sub">Stokta yok${u.times > 1 ? " · " + u.times + " kez okundu" : ""}${u.lastAt ? " · " + escapeHtml(fmtTime(u.lastAt)) : ""}</span></div>
+        </li>`).join("")}</ul>` : `<p class="hint">Stokta olmayan barkod okunmadı.</p>`}
+    </div>`;
+  $sayimLists.querySelectorAll("[data-mark]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const p = products.find((x) => x.code === btn.dataset.mark);
+      if (p) markCounted(p, "tap");
+    });
+  });
+}
+
+function resetSayim() {
+  sayim = emptySayim();
+  saveSayim();
+  setMsg($searchMsg, "", "");
+  setMsg($camMsg, "", "");
+  selected = null;
+  $results.innerHTML = "";
+  renderSayim();
+  showToast("warn", "Sayım sıfırlandı");
+}
+
+function csvEscape(v) {
+  const s = String(v == null ? "" : v);
+  if (/[",\n;]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+
+function buildExport() {
+  const counted = countedInStock();
+  const missing = missingProducts();
+  const unknown = unknownEntries();
+  const header = "Durum,Stok kodu,Ürün,IMEI,Saat,Not";
+  const rows = [header];
+  counted.forEach((p) => {
+    const rec = sayim.counted[p.code] || {};
+    rows.push(["Sayılan", p.code, p.name, p.imei, fmtTime(rec.at), rec.method || ""].map(csvEscape).join(","));
+  });
+  missing.forEach((p) => {
+    rows.push(["Eksik", p.code, p.name, p.imei, "", ""].map(csvEscape).join(","));
+  });
+  unknown.forEach((u) => {
+    rows.push(["Fazla/Bilinmeyen", "", "", u.raw, fmtTime(u.lastAt), u.times > 1 ? u.times + " kez" : ""].map(csvEscape).join(","));
+  });
+  const csv = rows.join("\n") + "\n";
+  const text = [
+    "MS Mobile Stok Sayımı",
+    $sayimProgress.textContent,
+    $stockTime.textContent,
+    "",
+    ...counted.map((p) => `SAYILAN  ${p.code}  ${p.name}  ${p.imei || "-"}`),
+    ...missing.map((p) => `EKSİK    ${p.code}  ${p.name}  ${p.imei || "-"}`),
+    ...unknown.map((u) => `FAZLA    ${u.raw}`),
+  ].join("\n");
+  return { csv, text };
+}
+
+async function exportSayim() {
+  const { csv, text } = buildExport();
+  const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+  const filename = "stok-sayimi-" + stamp + ".csv";
+  try {
+    if (navigator.share) {
+      const file = new File([csv], filename, { type: "text/csv" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: "MS Mobile Stok Sayımı", text, files: [file] });
+        return;
+      }
+      await navigator.share({ title: "MS Mobile Stok Sayımı", text });
+      return;
+    }
+  } catch (err) {
+    if (err && err.name === "AbortError") return;
+  }
+  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("good", "CSV indirildi, özet kopyalandı");
+  } catch (_) {
+    showToast("good", "CSV indirildi");
+  }
+}
+
+function setMode(next) {
+  mode = next === "sayim" ? "sayim" : "taksit";
+  document.body.dataset.mode = mode;
+  $modeTaksit.classList.toggle("on", mode === "taksit");
+  $modeSayim.classList.toggle("on", mode === "sayim");
+  $modeTaksit.setAttribute("aria-selected", mode === "taksit" ? "true" : "false");
+  $modeSayim.setAttribute("aria-selected", mode === "sayim" ? "true" : "false");
+  $pageTag.textContent = mode === "sayim" ? "Stok sayımı" : "Taksit fiyatları";
+  document.title = mode === "sayim" ? "MS Mobile Stok Sayımı" : "MS Mobile Taksit Fiyatları";
+  $scanHint.textContent = mode === "sayim" ? HINT_SAYIM : HINT_TAKSIT;
+  $btnFind.textContent = mode === "sayim" ? "Say" : "Bul";
+  $sayimPanel.classList.toggle("hidden", mode !== "sayim");
+  $taksitExtra.classList.toggle("hidden", mode !== "taksit");
+  $taksitFooter.classList.toggle("hidden", mode !== "taksit");
+  if (mode === "sayim") {
+    selected = null;
+    $results.innerHTML = "";
+    setMsg($searchMsg, "", "");
+    renderSayim();
+  } else {
+    $results.innerHTML = "";
+  }
+  saveSayim();
+}
+
 $btnScan.addEventListener("click", startCamera);
 $btnStop.addEventListener("click", () => stopCamera());
 $btnFind.addEventListener("click", () => runManual(true));
 $q.addEventListener("input", () => {
+  if (mode === "sayim") return;
   const v = $q.value.trim();
   if (!v) {
     selected = null;
     renderResults();
     return;
   }
-  const compact = v.replace(/\s+/g, "");
-  // exact IMEI or exact code should resolve immediately
   const { hits, kind } = findManual(v);
   if (hits.length === 1 && (kind === "imei" || kind === "code")) {
     showHits(hits);
@@ -483,6 +835,19 @@ $manualToggle.addEventListener("click", () => {
   $manualBox.classList.toggle("hidden");
 });
 $manualPrice.addEventListener("input", renderManual);
+$modeTaksit.addEventListener("click", () => setMode("taksit"));
+$modeSayim.addEventListener("click", () => setMode("sayim"));
+el("btnResetSayim").addEventListener("click", () => {
+  $confirmModal.classList.remove("hidden");
+});
+el("confirmNo").addEventListener("click", () => {
+  $confirmModal.classList.add("hidden");
+});
+el("confirmYes").addEventListener("click", () => {
+  $confirmModal.classList.add("hidden");
+  resetSayim();
+});
+el("btnExport").addEventListener("click", () => { exportSayim(); });
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
@@ -492,6 +857,8 @@ document.addEventListener("visibilitychange", () => {
 });
 
 async function init() {
+  loadSayim();
+  setMode(mode);
   try {
     await loadStock();
   } catch (err) {
@@ -499,6 +866,7 @@ async function init() {
     setMsg($searchMsg, "bad", "Stok verisi alınamadı. Sayfayı yenileyin.");
     console.error(err);
   }
+  if (mode === "sayim") renderSayim();
   setInterval(() => loadStock().catch(() => {}), 10 * 60 * 1000);
 }
 

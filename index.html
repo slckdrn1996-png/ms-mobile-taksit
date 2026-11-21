@@ -13,18 +13,24 @@
   <title>MS Mobile Taksit Fiyatları</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-mode="taksit">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div class="wrap">
     <header class="header">
       <div>
         <h1 class="logo">MS Mobile Store</h1>
-        <div class="tag">Taksit fiyatları</div>
+        <div class="tag" id="pageTag">Taksit fiyatları</div>
       </div>
       <div class="meta">
         <strong id="stockCount">Stok yükleniyor…</strong>
         <div id="stockTime"></div>
       </div>
     </header>
+
+    <nav class="modes" role="tablist" aria-label="Mod">
+      <button type="button" class="mode on" id="modeTaksit" role="tab" aria-selected="true">Taksit</button>
+      <button type="button" class="mode" id="modeSayim" role="tab" aria-selected="false">Stok Sayımı</button>
+    </nav>
 
     <div class="layout">
       <section class="card" id="scanCard">
@@ -36,11 +42,11 @@
         <div class="camera-actions" id="cameraActions">
           <button class="btn btn-stop" id="btnStop" type="button">Kamerayı kapat</button>
         </div>
-        <p class="hint">Etiketteki IMEI barkodunu beyaz çerçevenin içine hizalayın. İzin istenirse Safari’de İzin Ver’e dokunun.</p>
+        <p class="hint" id="scanHint">Etiketteki IMEI barkodunu beyaz çerçevenin içine hizalayın. İzin istenirse Safari’de İzin Ver’e dokunun.</p>
         <div id="camMsg"></div>
 
         <div style="margin-top:16px">
-          <label for="q" class="hint" style="display:block;margin-bottom:6px">veya elle arayın</label>
+          <label for="q" class="hint" style="display:block;margin-bottom:6px" id="searchLabel">veya elle arayın</label>
           <div class="row">
             <input class="search grow" id="q" type="text" inputmode="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="IMEI, stok kodu veya son 4 hane">
             <button class="btn" id="btnFind" type="button" style="width:auto;min-width:88px">Bul</button>
@@ -52,7 +58,20 @@
       <div id="results"></div>
     </div>
 
-    <section class="card">
+    <section class="card hidden" id="sayimPanel">
+      <div class="sayim-head">
+        <div class="sayim-count" id="sayimProgress">Sayılan 0 / 0</div>
+        <div class="hint" id="sayimExtra"></div>
+      </div>
+      <div class="progress-bar" aria-hidden="true"><span id="sayimBar" style="width:0%"></span></div>
+      <div class="row sayim-actions">
+        <button class="btn btn-ghost" id="btnExport" type="button">Dışa aktar</button>
+        <button class="btn btn-stop" id="btnResetSayim" type="button">Sayımı sıfırla</button>
+      </div>
+      <div id="sayimLists"></div>
+    </section>
+
+    <section class="card" id="taksitExtra">
       <button class="manual-toggle" id="manualToggle" type="button">Fiyat girerek hesapla</button>
       <div id="manualBox" class="hidden">
         <input class="search" id="manualPrice" type="number" inputmode="numeric" placeholder="Peşin fiyat (TL), örn. 50000">
@@ -60,8 +79,20 @@
       </div>
     </section>
 
-    <p class="footer">Vade farkı POS komisyon oranlarına göre hesaplanır (tek çekim %3,70 … 9 taksit %19,78); komisyon düşüldüğünde peşin fiyat net kalır.</p>
+    <p class="footer" id="taksitFooter">Vade farkı POS komisyon oranlarına göre hesaplanır (tek çekim %3,70 … 9 taksit %19,78); komisyon düşüldüğünde peşin fiyat net kalır.</p>
   </div>
+
+  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-card">
+      <h2 id="confirmTitle">Sayımı sıfırla</h2>
+      <p>Sayım sıfırlansın mı? Tüm işaretler silinir.</p>
+      <div class="row">
+        <button class="btn btn-ghost" id="confirmNo" type="button">Vazgeç</button>
+        <button class="btn btn-stop" id="confirmYes" type="button">Sıfırla</button>
+      </div>
+    </div>
+  </div>
+
   <script src="vendor/zxing-browser.min.js"></script>
   <script src="app.js"></script>
 </body>
