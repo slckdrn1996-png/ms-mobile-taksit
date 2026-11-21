@@ -1,7 +1,7 @@
 /* MS Mobile Taksit — search, camera scan, installment tables */
 "use strict";
 
-const BANKS = ["Axess", "Diğer Kartlar"];
+const BANKS = ["Diğer Kartlar"];
 const ORAN = { 1: 3.70, 2: 6.73, 3: 8.66, 4: 10.54, 5: 12.46, 6: 14.24, 7: 15.92, 8: 17.84, 9: 19.78, 10: 21.55, 11: 23.63, 12: 25.40 };
 const HINT_POSSIBLE_FORMATS = 2;
 const HINT_TRY_HARDER = 3;
@@ -36,9 +36,8 @@ let wakeLock = null;
 let audioCtx = null;
 let lastScan = { text: "", at: 0 };
 
-function taksitler(bank) {
-  const n = bank === "Axess" ? 4 : 9;
-  return Array.from({ length: n }, (_, i) => i + 1);
+function taksitler(_bank) {
+  return Array.from({ length: 9 }, (_, i) => i + 1);
 }
 function rate(_bank, n) {
   return ORAN[n] / 100;
