@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MS Mobile">
+  <meta name="theme-color" content="#eef2f6">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <title>MS Mobile Taksit Fiyatları</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div>
+        <h1 class="logo">MS Mobile Store</h1>
+        <div class="tag">Taksit fiyatları</div>
+      </div>
+      <div class="meta">
+        <strong id="stockCount">Stok yükleniyor…</strong>
+        <div id="stockTime"></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="card" id="scanCard">
+        <button class="btn btn-lg" id="btnScan" type="button">Barkod okut</button>
+        <div class="camera-box" id="cameraBox">
+          <video id="video" playsinline muted autoplay></video>
+          <div class="scan-guide" aria-hidden="true"></div>
+        </div>
+        <div class="camera-actions" id="cameraActions">
+          <button class="btn btn-stop" id="btnStop" type="button">Kamerayı kapat</button>
+        </div>
+        <p class="hint">Etiketteki IMEI barkodunu beyaz çerçevenin içine hizalayın. İzin istenirse Safari’de İzin Ver’e dokunun.</p>
+        <div id="camMsg"></div>
+
+        <div style="margin-top:16px">
+          <label for="q" class="hint" style="display:block;margin-bottom:6px">veya elle arayın</label>
+          <div class="row">
+            <input class="search grow" id="q" type="text" inputmode="search" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="IMEI, stok kodu veya son 4 hane">
+            <button class="btn" id="btnFind" type="button" style="width:auto;min-width:88px">Bul</button>
+          </div>
+        </div>
+        <div id="searchMsg"></div>
+      </section>
+
+      <div id="results"></div>
+    </div>
+
+    <section class="card">
+      <button class="manual-toggle" id="manualToggle" type="button">Fiyat girerek hesapla</button>
+      <div id="manualBox" class="hidden">
+        <input class="search" id="manualPrice" type="number" inputmode="numeric" placeholder="Peşin fiyat (TL), örn. 50000">
+        <div id="manualTables"></div>
+      </div>
+    </section>
+
+    <p class="footer">Vade farkı POS komisyon oranlarına göre hesaplanır (tek çekim %3,70 … 9 taksit %19,78); komisyon düşüldüğünde peşin fiyat net kalır. Axess 4 taksite, diğer kartlar 9 taksite kadar.</p>
+  </div>
+  <script src="vendor/zxing-browser.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

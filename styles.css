@@ -1,0 +1,217 @@
+/* MS Mobile Taksit — iPad / Safari */
+:root {
+  --bg: #eef2f6;
+  --card: #ffffff;
+  --ink: #102033;
+  --muted: #5b6b7c;
+  --line: #d5dee8;
+  --accent: #0c5cab;
+  --accent-press: #0a4d90;
+  --accent-soft: #e6f0fa;
+  --good: #0f7a4a;
+  --good-bg: #e7f7ee;
+  --warn: #8a4b00;
+  --warn-bg: #fff3e0;
+  --bad: #a32020;
+  --bad-bg: #fdecec;
+  --shadow: 0 8px 28px rgba(16, 32, 51, 0.08);
+  --radius: 16px;
+  --tap: 52px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+}
+body {
+  min-height: 100dvh;
+  padding: calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(24px + var(--safe-b)) calc(16px + var(--safe-l));
+}
+h1, h2, h3 { margin: 0; font-weight: 700; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+.wrap { max-width: 1100px; margin: 0 auto; }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.logo { font-size: 1.45rem; letter-spacing: -0.02em; }
+.tag { color: var(--muted); font-size: 0.95rem; margin-top: 2px; }
+.meta {
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.meta strong { display: block; color: var(--ink); font-size: 0.95rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.row { display: flex; gap: 10px; align-items: stretch; }
+.row > .grow { flex: 1; }
+.btn {
+  min-height: var(--tap);
+  border: 0;
+  border-radius: 14px;
+  padding: 0 18px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.btn:active { background: var(--accent-press); }
+.btn:disabled { opacity: 0.55; }
+.btn-lg { min-height: 64px; font-size: 1.15rem; }
+.btn-ghost {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.btn-ghost:active { filter: brightness(0.95); background: var(--accent-soft); }
+.btn-stop { background: #3a4a5c; }
+.btn-stop:active { background: #2c3948; }
+.search {
+  width: 100%;
+  min-height: var(--tap);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  color: var(--ink);
+}
+.search:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(12, 92, 171, 0.15);
+}
+.hint { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; }
+.callout {
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+.callout.warn { background: var(--warn-bg); color: var(--warn); }
+.callout.bad { background: var(--bad-bg); color: var(--bad); }
+.callout.good { background: var(--good-bg); color: var(--good); }
+.camera-box {
+  display: none;
+  position: relative;
+  margin-top: 12px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  aspect-ratio: 4 / 3;
+  max-height: 52dvh;
+}
+.camera-box.on { display: block; }
+.camera-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.scan-guide {
+  pointer-events: none;
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 50%;
+  height: 88px;
+  transform: translateY(-50%);
+  border: 3px solid rgba(255,255,255,0.92);
+  border-radius: 10px;
+  box-shadow: 0 0 0 999px rgba(0,0,0,0.28);
+}
+.camera-actions { display: none; margin-top: 10px; }
+.camera-actions.on { display: block; }
+.pick { list-style: none; margin: 0; padding: 0; }
+.pick li + li { border-top: 1px solid var(--line); }
+.pick button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 14px 4px;
+  min-height: var(--tap);
+  color: inherit;
+}
+.pick button:active { background: var(--accent-soft); border-radius: 10px; }
+.pick .name { font-weight: 700; display: block; }
+.pick .sub { color: var(--muted); font-size: 0.9rem; }
+.device-name { font-size: 1.2rem; margin-bottom: 10px; }
+.props { display: grid; gap: 8px; margin: 12px 0; }
+.prop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.prop .k { color: var(--muted); }
+.prop .v { font-weight: 700; font-variant-numeric: tabular-nums; }
+.tables {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  margin-top: 8px;
+}
+.bank h3 { font-size: 1.05rem; margin-bottom: 8px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+th, td { padding: 10px 8px; text-align: right; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 600; font-size: 0.88rem; border-bottom: 1px solid var(--line); }
+tr:nth-child(even) td { background: #f6f9fc; }
+.footer {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.hidden { display: none !important; }
+.manual-toggle {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font-weight: 700;
+  padding: 8px 0;
+  min-height: 44px;
+}
+@media (orientation: landscape) and (min-width: 900px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .camera-box { max-height: 70dvh; }
+}
+@media (orientation: landscape) and (max-height: 700px) {
+  body { padding-top: calc(10px + var(--safe-t)); }
+  .logo { font-size: 1.2rem; }
+  .camera-box { aspect-ratio: 16 / 9; max-height: 62dvh; }
+}
