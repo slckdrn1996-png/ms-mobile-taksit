@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-21T18:25:13.178599+03:00",
-  "updatedAtLabel": "21 Kasım 2026 18:25 (İstanbul)",
-  "count": 55,
+  "updatedAt": "2026-11-21T18:42:27.728022+03:00",
+  "updatedAtLabel": "21 Kasım 2026 18:42 (İstanbul)",
+  "count": 56,
   "products": [
     {
       "code": "ST0009",
@@ -332,6 +332,12 @@
       "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
       "imei": "351695138200706",
       "price": 150000
+    },
+    {
+      "code": "ST0229",
+      "name": "İPHONE 18 PRO MAX 256GB MAVİ 22 AY GARANTİLİ",
+      "imei": "353272922133457",
+      "price": 140000
     }
   ]
 }
