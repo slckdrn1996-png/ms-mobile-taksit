@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-21T17:07:14.566919+03:00",
-  "updatedAtLabel": "21 Kasım 2026 17:07 (İstanbul)",
-  "count": 58,
+  "updatedAt": "2026-11-21T16:38:33.656082+03:00",
+  "updatedAtLabel": "21 Kasım 2026 16:38 (İstanbul)",
+  "count": 57,
   "products": [
     {
       "code": "ST0009",
@@ -344,12 +344,6 @@
       "name": "İPHONE 13 128GB BEYAZ PİL 81",
       "imei": "356052833472377",
       "price": 25000
-    },
-    {
-      "code": "ST9999",
-      "name": "YAYIN TESTI",
-      "imei": "",
-      "price": 1
     }
   ]
 }
