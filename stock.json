@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-21T18:05:19.845139+03:00",
-  "updatedAtLabel": "21 Kasım 2026 18:05 (İstanbul)",
-  "count": 57,
+  "updatedAt": "2026-11-21T18:25:13.178599+03:00",
+  "updatedAtLabel": "21 Kasım 2026 18:25 (İstanbul)",
+  "count": 55,
   "products": [
     {
       "code": "ST0009",
@@ -88,12 +88,6 @@
       "price": 107500
     },
     {
-      "code": "ST0122",
-      "name": "İPHONE 17 256GB BEYAZ KAPALI KUTU AF",
-      "imei": "350292987637948",
-      "price": 87000
-    },
-    {
       "code": "ST0128",
       "name": "İPHONE 15 PRO MAX 256GB MAVİ PİL 86",
       "imei": "355975764923573",
@@ -178,12 +172,6 @@
       "price": 60000
     },
     {
-      "code": "ST0186",
-      "name": "İPHONE 17 PRO MAX 256GB BEYAZ 19 AY GARANTİLİ PİL 100",
-      "imei": "350782288437253",
-      "price": 113000
-    },
-    {
       "code": "ST0187",
       "name": "İPHONE 18 PRO 256GB BORDO 24 AY GARANTİLİ DEVİR 1",
       "imei": "359344198440801",
@@ -214,22 +202,10 @@
       "price": 70000
     },
     {
-      "code": "ST0196",
-      "name": "İPHONE 18 PRO MAX 512GB BORDO KAPALI KUTU MF",
-      "imei": "351076099676632",
-      "price": 167000
-    },
-    {
       "code": "ST0197",
       "name": "İPHONE 18 PRO MAX 512GB BORDO KAPALI KUTU MF",
       "imei": "351076098618080",
       "price": 167000
-    },
-    {
-      "code": "ST0198",
-      "name": "İPHONE 17 PRO MAX 256GB TURUNCU 24 AY GARANTİLİ PİL 100 DEVİR 0",
-      "imei": "359030888045188",
-      "price": 110000
     },
     {
       "code": "ST0203",
@@ -284,6 +260,12 @@
       "name": "İPHONE 17 PRO MAX 256GB TURUNCU KAPALI KUTU AF",
       "imei": "355211757067370",
       "price": 117000
+    },
+    {
+      "code": "ST0227",
+      "name": "İPHONE 14 PRO MAX 256GB MOR PASAPORT KAYITLI PİL 87",
+      "imei": "351039012391556",
+      "price": 55000
     },
     {
       "code": "ST0042",
@@ -344,6 +326,12 @@
       "name": "İPHONE 13 128GB BEYAZ PİL 81",
       "imei": "356052833472377",
       "price": 25000
+    },
+    {
+      "code": "ST0224",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "351695138200706",
+      "price": 150000
     }
   ]
 }
