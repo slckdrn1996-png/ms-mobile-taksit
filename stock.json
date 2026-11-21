@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-21T18:42:27.728022+03:00",
-  "updatedAtLabel": "21 Kasım 2026 18:42 (İstanbul)",
-  "count": 56,
+  "updatedAt": "2026-11-21T18:51:49.109862+03:00",
+  "updatedAtLabel": "21 Kasım 2026 18:51 (İstanbul)",
+  "count": 57,
   "products": [
     {
       "code": "ST0009",
@@ -178,12 +178,6 @@
       "price": 130000
     },
     {
-      "code": "ST0190",
-      "name": "İPHONE 17 PRO MAX 256GB TURUNCU KAPALI KUTU AF",
-      "imei": "358072808469420",
-      "price": 117000
-    },
-    {
       "code": "ST0193",
       "name": "İPHONE 18 PRO MAX 512GB MAVİ KAPALI KUTU MF",
       "imei": "358687532846542",
@@ -268,6 +262,18 @@
       "price": 55000
     },
     {
+      "code": "ST0229",
+      "name": "İPHONE 18 PRO MAX 256GB MAVİ 22 AY GARANTİLİ",
+      "imei": "353272922133457",
+      "price": 140000
+    },
+    {
+      "code": "ST0230",
+      "name": "İPHONE 14 PRO MAX 128GB SİYAH PİL 80",
+      "imei": "358034168661590",
+      "price": 50000
+    },
+    {
       "code": "ST0042",
       "name": "APPLE ŞARJ KABLOSU",
       "imei": "",
@@ -334,10 +340,10 @@
       "price": 150000
     },
     {
-      "code": "ST0229",
-      "name": "İPHONE 18 PRO MAX 256GB MAVİ 22 AY GARANTİLİ",
-      "imei": "353272922133457",
-      "price": 140000
+      "code": "ST0231",
+      "name": "İPHONE 14 PRO MAX 256GB MOR PASAPORT KAYITLI PİL 78",
+      "imei": "350550256161977",
+      "price": 53000
     }
   ]
 }
