@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-23T16:13:09.062671+03:00",
-  "updatedAtLabel": "23 Kasım 2026 16:13 (İstanbul)",
-  "count": 59,
+  "updatedAt": "2026-11-23T16:49:11.797791+03:00",
+  "updatedAtLabel": "23 Kasım 2026 16:49 (İstanbul)",
+  "count": 57,
   "products": [
     {
       "code": "ST0009",
@@ -110,12 +110,6 @@
       "name": "İPHONE 17 PRO MAX 256GB TURUNCU YURT DIŞI PİL 98",
       "imei": "351372774542458",
       "price": 63000
-    },
-    {
-      "code": "ST0160",
-      "name": "İPHONE 15 128GB MAVİ KAPALI KUTU AF",
-      "imei": "357889570746797",
-      "price": 58000
     },
     {
       "code": "ST0164",
@@ -350,12 +344,6 @@
       "name": "İPHONE 13 128GB BEYAZ PİL 81",
       "imei": "356052833472377",
       "price": 25000
-    },
-    {
-      "code": "ST0224",
-      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
-      "imei": "351695138200706",
-      "price": 150000
     }
   ]
 }
