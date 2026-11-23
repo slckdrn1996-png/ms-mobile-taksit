@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-23T15:15:56.928586+03:00",
-  "updatedAtLabel": "23 Kasım 2026 15:15 (İstanbul)",
-  "count": 57,
+  "updatedAt": "2026-11-23T15:48:35.978726+03:00",
+  "updatedAtLabel": "23 Kasım 2026 15:48 (İstanbul)",
+  "count": 59,
   "products": [
     {
       "code": "ST0009",
@@ -278,6 +278,18 @@
       "name": "İPHONE 14 PRO MAX 256GB MOR PASAPORT KAYITLI PİL 78",
       "imei": "350550256161977",
       "price": 53000
+    },
+    {
+      "code": "ST0232",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "353886335187006",
+      "price": 150000
+    },
+    {
+      "code": "ST0233",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "353886335294711",
+      "price": 150000
     },
     {
       "code": "ST0042",
