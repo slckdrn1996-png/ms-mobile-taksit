@@ -235,10 +235,218 @@ function updateDevicePricing() {
   tables.innerHTML = bankTablesHtml(cash);
 }
 
+function sanitizeScan(raw) {
+  let s = String(raw == null ? "" : raw).replace(/[\s\r\n\t\u0000-\u001F\u007F]+/g, "");
+  const m16 = s.match(/\d{16}/);
+  if (m16) return m16[0];
+  const m15 = s.match(/\d{15}/);
+  if (m15) return m15[0];
+  const st = s.match(/ST\d{3,}/i);
+  if (st) {
+    const rest = s.replace(st[0], "");
+    if (!/[A-Za-z]{3,}/.test(rest)) return st[0].toLocaleUpperCase("tr-TR");
+  }
+  return s;
+}
+
+function looksCompleteScan(raw) {
+  const s = sanitizeScan(raw);
+  if (/^\d{15,16}$/.test(s)) return true;
+  if (/^ST\d+$/i.test(s)) {
+    const u = s.toLocaleUpperCase("tr-TR");
+    return products.some((p) => p.code.toLocaleUpperCase("tr-TR") === u);
+  }
+  return false;
+}
+
+function isModalOpen() {
+  return $confirmModal && !$confirmModal.classList.contains("hidden");
+}
+
+function isOtherEditable(el) {
+  if (!el || el === $q) return false;
+  const tag = (el.tagName || "").toLowerCase();
+  if (tag === "textarea" || el.isContentEditable) return true;
+  if (tag === "input") {
+    const typ = (el.type || "text").toLowerCase();
+    return typ !== "button" && typ !== "submit" && typ !== "checkbox" && typ !== "radio" && typ !== "file" && typ !== "hidden" && typ !== "reset";
+  }
+  return false;
+}
+
+function focusSearchBox(opts) {
+  const selectAll = opts && opts.selectAll;
+  const go = () => {
+    try {
+      $q.focus({ preventScroll: true });
+      const n = $q.value.length;
+      if (selectAll && n) $q.setSelectionRange(0, n);
+      else $q.setSelectionRange(n, n);
+    } catch (_) { /* ignore */ }
+  };
+  go();
+  requestAnimationFrame(go);
+}
+
+function finishSearchField(displayValue) {
+  scanState.lookupDone = true;
+  scanState.burst = false;
+  scanState.buf = "";
+  scanState.lastChar = "";
+  scanState.lastAt = 0;
+  clearTimeout(scanState.idleTimer);
+  if (mode === "sayim") {
+    $q.value = "";
+    focusSearchBox();
+  } else {
+    if (displayValue != null) $q.value = displayValue;
+    focusSearchBox({ selectAll: true });
+  }
+}
+
+const SCANNER_GAP_MS = 50;
+const SCANNER_IDLE_MS = 100;
+const scanState = {
+  lastAt: 0,
+  burst: false,
+  buf: "",
+  lastChar: "",
+  otherEl: null,
+  otherBefore: "",
+  lookupDone: false,
+  idleTimer: null,
+};
+
+function armIdleCommit() {
+  clearTimeout(scanState.idleTimer);
+  scanState.idleTimer = setTimeout(() => {
+    const raw = scanState.burst ? scanState.buf : $q.value;
+    if (looksCompleteScan(raw)) commitWedgeScan(raw);
+  }, SCANNER_IDLE_MS);
+}
+
+function commitWedgeScan(raw) {
+  const cleaned = sanitizeScan(raw == null ? $q.value : raw);
+  clearTimeout(scanState.idleTimer);
+  scanState.burst = false;
+  scanState.buf = "";
+  scanState.lastChar = "";
+  scanState.lastAt = 0;
+  if (!cleaned) return;
+  $q.value = cleaned;
+  runManual(true);
+}
+
+function onWedgeKeydown(e) {
+  if (isModalOpen()) return;
+  if (e.key === "Enter") {
+    if (e.repeat) return;
+    if (isOtherEditable(e.target)) return;
+    e.preventDefault();
+    commitWedgeScan(scanState.burst ? scanState.buf : $q.value);
+    return;
+  }
+  if ((e.key === "Tab" || e.key === "Clear") && (scanState.burst || scanState.buf)) {
+    e.preventDefault();
+    commitWedgeScan(scanState.buf || $q.value);
+    return;
+  }
+  const scanChar = e.key.length === 1 && /[A-Za-z0-9]/i.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey;
+  if (!scanChar) return;
+
+  const now = performance.now();
+  const dt = now - scanState.lastAt;
+  const other = isOtherEditable(e.target);
+  const fast = scanState.lastAt > 0 && dt < SCANNER_GAP_MS;
+  const startReplace = scanState.lookupDone || (
+    $q.value && $q.selectionStart === 0 && $q.selectionEnd === $q.value.length
+  ) || looksCompleteScan($q.value);
+
+  if (other && !fast && !scanState.burst) {
+    scanState.otherEl = e.target;
+    scanState.otherBefore = e.target.value;
+    scanState.lastChar = e.key;
+    scanState.lastAt = now;
+    scanState.burst = false;
+    return;
+  }
+
+  if (other && (fast || scanState.burst)) {
+    e.preventDefault();
+    if (scanState.otherEl && scanState.otherBefore != null) {
+      try { scanState.otherEl.value = scanState.otherBefore; } catch (_) { /* ignore */ }
+    }
+    if (!scanState.burst) {
+      scanState.buf = (scanState.lastChar || "") + e.key;
+      scanState.burst = true;
+    } else {
+      scanState.buf += e.key;
+    }
+    $q.value = scanState.buf;
+    focusSearchBox();
+    scanState.lookupDone = false;
+    scanState.lastChar = e.key;
+    scanState.lastAt = now;
+    armIdleCommit();
+    return;
+  }
+
+  if (startReplace && !fast) {
+    e.preventDefault();
+    scanState.burst = false;
+    scanState.buf = e.key;
+    scanState.lastChar = e.key;
+    $q.value = e.key;
+    focusSearchBox();
+    scanState.lookupDone = false;
+    scanState.lastAt = now;
+    armIdleCommit();
+    return;
+  }
+
+  if (fast) {
+    e.preventDefault();
+    if (!scanState.burst) {
+      scanState.burst = true;
+      scanState.buf = (scanState.lastChar || "") + e.key;
+    } else {
+      scanState.buf += e.key;
+    }
+    $q.value = scanState.buf;
+    focusSearchBox();
+    scanState.lookupDone = false;
+    scanState.lastChar = e.key;
+    scanState.lastAt = now;
+    armIdleCommit();
+    return;
+  }
+
+  scanState.burst = false;
+  scanState.buf = "";
+  scanState.lastChar = e.key;
+  scanState.lastAt = now;
+  scanState.lookupDone = false;
+  if (e.target !== $q) return;
+  armIdleCommit();
+}
+
+function onWedgePaste(e) {
+  if (isModalOpen()) return;
+  if (isOtherEditable(e.target)) return;
+  const text = (e.clipboardData && e.clipboardData.getData("text")) || "";
+  if (!text) return;
+  const cleaned = sanitizeScan(text);
+  if (!looksCompleteScan(cleaned) && !/^\d{8,}$/.test(cleaned) && !/^ST\d+/i.test(cleaned)) return;
+  e.preventDefault();
+  $q.value = cleaned;
+  focusSearchBox();
+  commitWedgeScan(cleaned);
+}
+
 function selectProduct(p) {
   selected = { kind: "one", product: p };
-  $q.value = p.imei || p.code;
   renderResults();
+  finishSearchField(p.imei || p.code);
 }
 
 function showHits(hits, missText) {
@@ -253,14 +461,17 @@ function showHits(hits, missText) {
   if (hits.length > 1) {
     selected = { kind: "list", hits };
     renderResults();
+    finishSearchField(sanitizeScan($q.value));
     return;
   }
   selected = { kind: "miss", message: missText || "Cihaz bulunamadı" };
   renderResults();
+  finishSearchField(sanitizeScan($q.value));
 }
 
 function runManual(loose) {
-  const raw = $q.value;
+  const raw = sanitizeScan($q.value);
+  if (raw !== $q.value) $q.value = raw;
   const { hits } = findManual(raw);
   if (!raw.trim()) {
     selected = null;
@@ -581,9 +792,9 @@ function markCounted(p, method) {
     setMsg($camMsg, "warn", "Zaten sayıldı");
     renderSayim();
     saveSayim();
-    $q.value = "";
     selected = null;
     $results.innerHTML = "";
+    finishSearchField("");
     return;
   }
   sayim.counted[p.code] = {
@@ -597,11 +808,11 @@ function markCounted(p, method) {
   showToast("good", "Sayıldı: " + p.name);
   setMsg($searchMsg, "good", "Sayıldı: " + p.name);
   setMsg($camMsg, "good", "Sayıldı");
-  $q.value = "";
   selected = null;
   $results.innerHTML = "";
   saveSayim();
   renderSayim();
+  finishSearchField("");
 }
 
 function markUnknown(raw) {
@@ -622,11 +833,11 @@ function markUnknown(raw) {
     setMsg($searchMsg, "warn", "Fazla / bilinmeyen: " + key);
   }
   setMsg($camMsg, "warn", "Stokta yok");
-  $q.value = "";
   selected = null;
   $results.innerHTML = "";
   saveSayim();
   renderSayim();
+  finishSearchField("");
 }
 
 function handleSayimHits(hits, missText, opts) {
@@ -639,6 +850,7 @@ function handleSayimHits(hits, missText, opts) {
     selected = { kind: "list", hits };
     renderResults();
     setMsg($searchMsg, "", "");
+    finishSearchField(sanitizeScan($q.value));
     return;
   }
   if (fromScan) {
@@ -653,6 +865,7 @@ function handleSayimHits(hits, missText, opts) {
   }
   selected = { kind: "miss", message: missText || "Cihaz bulunamadı" };
   renderResults();
+  finishSearchField(sanitizeScan($q.value));
 }
 
 function renderSayim() {
@@ -813,8 +1026,9 @@ $btnScan.addEventListener("click", startCamera);
 $btnStop.addEventListener("click", () => stopCamera());
 $btnFind.addEventListener("click", () => runManual(true));
 $q.addEventListener("input", () => {
+  if (scanState.burst) return;
   if (mode === "sayim") return;
-  const v = $q.value.trim();
+  const v = sanitizeScan($q.value);
   if (!v) {
     selected = null;
     renderResults();
@@ -825,12 +1039,8 @@ $q.addEventListener("input", () => {
     showHits(hits);
   }
 });
-$q.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.repeat) {
-    e.preventDefault();
-    runManual(true);
-  }
-});
+document.addEventListener("keydown", onWedgeKeydown, true);
+document.addEventListener("paste", onWedgePaste, true);
 $manualToggle.addEventListener("click", () => {
   $manualBox.classList.toggle("hidden");
 });
