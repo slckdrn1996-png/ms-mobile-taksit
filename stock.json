@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-24T16:10:34.657837+03:00",
-  "updatedAtLabel": "24 Kasım 2026 16:10 (İstanbul)",
-  "count": 55,
+  "updatedAt": "2026-11-24T16:48:41.647526+03:00",
+  "updatedAtLabel": "24 Kasım 2026 16:48 (İstanbul)",
+  "count": 57,
   "products": [
     {
       "code": "ST0009",
@@ -256,22 +256,28 @@
       "price": 53000
     },
     {
-      "code": "ST0232",
-      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
-      "imei": "353886335187006",
-      "price": 150000
-    },
-    {
-      "code": "ST0233",
-      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
-      "imei": "353886335294711",
-      "price": 150000
-    },
-    {
       "code": "ST0234",
       "name": "İPHONE 18 PRO MAX 256GB BORDO YURT DIŞI",
       "imei": "351139797996080",
       "price": 90000
+    },
+    {
+      "code": "ST0235",
+      "name": "İPHONE 17 PRO MAX 256GB MAVİ KAPALI KUTU AF",
+      "imei": "350156807887217",
+      "price": 117000
+    },
+    {
+      "code": "ST0236",
+      "name": "İPHONE 16 PRO MAX 256GB ÇÖL PİL 90",
+      "imei": "351613327083429",
+      "price": 85000
+    },
+    {
+      "code": "ST0237",
+      "name": "İPHONE 16 128GB BEYAZ PİL 80",
+      "imei": "354614893137091",
+      "price": 53000
     },
     {
       "code": "ST0042",
@@ -332,6 +338,12 @@
       "name": "İPHONE 13 128GB BEYAZ PİL 81",
       "imei": "356052833472377",
       "price": 25000
+    },
+    {
+      "code": "ST0213",
+      "name": "İPHONE 16 128GB BEYAZ 11 AY GARANTİL PİL 90",
+      "imei": "356913123118899",
+      "price": 59000
     }
   ]
 }
