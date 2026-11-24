@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-24T20:16:02.369546+03:00",
-  "updatedAtLabel": "24 Kasım 2026 20:16 (İstanbul)",
-  "count": 57,
+  "updatedAt": "2026-11-24T20:56:32.872883+03:00",
+  "updatedAtLabel": "24 Kasım 2026 20:56 (İstanbul)",
+  "count": 62,
   "products": [
     {
       "code": "ST0009",
@@ -148,12 +148,6 @@
       "price": 45000
     },
     {
-      "code": "ST0185",
-      "name": "İPHONE 15 PRO 256GB SİYAH PİL 85 (KAPAK KIRIK)",
-      "imei": "356876523948654",
-      "price": 60000
-    },
-    {
       "code": "ST0187",
       "name": "İPHONE 18 PRO 256GB BORDO 24 AY GARANTİLİ DEVİR 1",
       "imei": "359344198440801",
@@ -280,6 +274,36 @@
       "price": 58000
     },
     {
+      "code": "ST0239",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU MF",
+      "imei": "353886337662451",
+      "price": 150000
+    },
+    {
+      "code": "ST0240",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU MF",
+      "imei": "358582918606166",
+      "price": 150000
+    },
+    {
+      "code": "ST0241",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU MF",
+      "imei": "358582918502654",
+      "price": 150000
+    },
+    {
+      "code": "ST0242",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU MF",
+      "imei": "358582917651445",
+      "price": 150000
+    },
+    {
+      "code": "ST0243",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU MF",
+      "imei": "358582917414596",
+      "price": 150000
+    },
+    {
       "code": "ST0042",
       "name": "APPLE ŞARJ KABLOSU",
       "imei": "",
@@ -302,12 +326,6 @@
       "name": "İPAD AİR M3 128GB MAVİ",
       "imei": "",
       "price": 32000
-    },
-    {
-      "code": "ST0142",
-      "name": "İPHONE DUO 256GB BEYAZ 24 AY GARANTİLİ",
-      "imei": "",
-      "price": 230000
     },
     {
       "code": "ST0162",
@@ -344,6 +362,18 @@
       "name": "İPHONE 16 128GB BEYAZ 11 AY GARANTİL PİL 90",
       "imei": "356913123118899",
       "price": 59000
+    },
+    {
+      "code": "ST0244",
+      "name": "MACBOOK PRO M4 PRO 16 İNÇ",
+      "imei": "",
+      "price": 105000
+    },
+    {
+      "code": "ST0245",
+      "name": "SAMSUNG GALAXY S26 ULTRA 256GB SİYAH YURT DIŞI",
+      "imei": "359256150188808",
+      "price": 50000
     }
   ]
 }
