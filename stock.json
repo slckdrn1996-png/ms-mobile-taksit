@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-24T15:15:47.760205+03:00",
-  "updatedAtLabel": "24 Kasım 2026 15:15 (İstanbul)",
-  "count": 56,
+  "updatedAt": "2026-11-24T15:45:24.708966+03:00",
+  "updatedAtLabel": "24 Kasım 2026 15:45 (İstanbul)",
+  "count": 55,
   "products": [
     {
       "code": "ST0009",
@@ -176,12 +176,6 @@
       "name": "İPHONE 15 PRO MAX 256GB NATUREL PİL 82",
       "imei": "351149519162424",
       "price": 70000
-    },
-    {
-      "code": "ST0197",
-      "name": "İPHONE 18 PRO MAX 512GB BORDO KAPALI KUTU MF",
-      "imei": "351076098618080",
-      "price": 167000
     },
     {
       "code": "ST0203",
