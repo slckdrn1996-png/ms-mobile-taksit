@@ -186,6 +186,11 @@ th, td { padding: 10px 8px; text-align: right; }
 th:first-child, td:first-child { text-align: left; }
 th { color: var(--muted); font-weight: 600; font-size: 0.88rem; border-bottom: 1px solid var(--line); }
 tr:nth-child(even) td { background: #f6f9fc; }
+tr.nakit td {
+  background: var(--good-bg);
+  font-weight: 700;
+}
+tr.nakit td:first-child { color: var(--good); }
 .footer {
   color: var(--muted);
   font-size: 0.86rem;
