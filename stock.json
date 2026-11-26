@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-26T14:15:35.800491+03:00",
-  "updatedAtLabel": "26 Kasım 2026 14:15 (İstanbul)",
+  "updatedAt": "2026-11-26T14:55:20.768808+03:00",
+  "updatedAtLabel": "26 Kasım 2026 14:55 (İstanbul)",
   "count": 66,
   "products": [
     {
@@ -232,12 +232,6 @@
       "price": 55000
     },
     {
-      "code": "ST0229",
-      "name": "İPHONE 18 PRO MAX 256GB MAVİ 22 AY GARANTİLİ",
-      "imei": "353272922133457",
-      "price": 140000
-    },
-    {
       "code": "ST0230",
       "name": "İPHONE 14 PRO MAX 128GB SİYAH PİL 80",
       "imei": "358034168661590",
@@ -398,6 +392,12 @@
       "name": "SAMSUNG GALAXY S26 ULTRA 256GB SİYAH YURT DIŞI",
       "imei": "359256150188808",
       "price": 50000
+    },
+    {
+      "code": "ST0253",
+      "name": "DJİ MİNİ 3",
+      "imei": "",
+      "price": 25000
     }
   ]
 }
