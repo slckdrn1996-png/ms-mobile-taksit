@@ -444,6 +444,8 @@ function onWedgePaste(e) {
 }
 
 function selectProduct(p) {
+  // Yeni cihaz (veya aynı cihaz yeniden) yüklenince önceki indirim kalmasın.
+  discount = "";
   selected = { kind: "one", product: p };
   renderResults();
   finishSearchField(p.imei || p.code);
