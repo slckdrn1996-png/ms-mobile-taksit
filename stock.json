@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-26T18:47:35.605681+03:00",
-  "updatedAtLabel": "26 Kasım 2026 18:47 (İstanbul)",
-  "count": 68,
+  "updatedAt": "2026-11-26T19:23:46.550623+03:00",
+  "updatedAtLabel": "26 Kasım 2026 19:23 (İstanbul)",
+  "count": 66,
   "products": [
     {
       "code": "ST0009",
@@ -112,12 +112,6 @@
       "price": 70000
     },
     {
-      "code": "ST0167",
-      "name": "İPHONE 17 PRO MAX 256GB TURUNCU 19 AY GARANTİLİ PİL 100",
-      "imei": "352464902645961",
-      "price": 108000
-    },
-    {
       "code": "ST0168",
       "name": "İPHONE 17 PRO MAX 256GB TURUNCU KAPALI KUTU AF",
       "imei": "358072808837485",
@@ -218,12 +212,6 @@
       "name": "İPHONE 16 128GB BEYAZ 13 AY GARANTİLİ PİL 92",
       "imei": "351288150512552",
       "price": 59000
-    },
-    {
-      "code": "ST0223",
-      "name": "İPHONE 17 PRO MAX 256GB TURUNCU KAPALI KUTU AF",
-      "imei": "355211757067370",
-      "price": 117000
     },
     {
       "code": "ST0227",
