@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-26T14:55:20.768808+03:00",
-  "updatedAtLabel": "26 Kasım 2026 14:55 (İstanbul)",
-  "count": 66,
+  "updatedAt": "2026-11-26T15:19:12.792734+03:00",
+  "updatedAtLabel": "26 Kasım 2026 15:19 (İstanbul)",
+  "count": 68,
   "products": [
     {
       "code": "ST0009",
@@ -398,6 +398,18 @@
       "name": "DJİ MİNİ 3",
       "imei": "",
       "price": 25000
+    },
+    {
+      "code": "ST0254",
+      "name": "DJİ AİR 3S",
+      "imei": "",
+      "price": 90000
+    },
+    {
+      "code": "ST0255",
+      "name": "DJİ AVATA 2",
+      "imei": "",
+      "price": 44000
     }
   ]
 }
