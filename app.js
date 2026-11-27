@@ -145,7 +145,7 @@ function installmentRows(price, bank) {
 
 function bankTablesHtml(price) {
   const cash = Math.max(0, Number(price) || 0);
-  const nakitRow = `<tr class="nakit"><td>Nakit</td><td>—</td><td>${nm(cash)}</td></tr>`;
+  const nakitRow = `<tr class="nakit"><td>Havale</td><td>—</td><td>${nm(cash)}</td></tr>`;
   return `<div class="tables">${BANKS.map((b) => `
     <div class="bank">
       <h3>${escapeHtml(b)}</h3>
