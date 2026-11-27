@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-27T15:49:16.796358+03:00",
-  "updatedAtLabel": "27 Kasım 2026 15:49 (İstanbul)",
-  "count": 64,
+  "updatedAt": "2026-11-27T16:20:09.760143+03:00",
+  "updatedAtLabel": "27 Kasım 2026 16:20 (İstanbul)",
+  "count": 63,
   "products": [
     {
       "code": "ST0009",
@@ -190,18 +190,6 @@
       "price": 70000
     },
     {
-      "code": "ST0220",
-      "name": "İPHONE 16 128GB BEYAZ 13 AY GARANTİLİ PİL 92",
-      "imei": "351288150512552",
-      "price": 59000
-    },
-    {
-      "code": "ST0227",
-      "name": "İPHONE 14 PRO MAX 256GB MOR PASAPORT KAYITLI PİL 87",
-      "imei": "351039012391556",
-      "price": 55000
-    },
-    {
       "code": "ST0230",
       "name": "İPHONE 14 PRO MAX 128GB SİYAH PİL 80",
       "imei": "358034168661590",
@@ -310,6 +298,12 @@
       "price": 25000
     },
     {
+      "code": "ST0262",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO YURT DIŞI DEVİR 27",
+      "imei": "355713692086571",
+      "price": 80000
+    },
+    {
       "code": "ST0042",
       "name": "APPLE ŞARJ KABLOSU",
       "imei": "",
@@ -358,12 +352,6 @@
       "price": 25000
     },
     {
-      "code": "ST0213",
-      "name": "İPHONE 16 128GB BEYAZ 11 AY GARANTİL PİL 90",
-      "imei": "356913123118899",
-      "price": 59000
-    },
-    {
       "code": "ST0244",
       "name": "MACBOOK PRO M4 PRO 16 İNÇ",
       "imei": "",
@@ -386,6 +374,12 @@
       "name": "DJİ AVATA 2",
       "imei": "",
       "price": 44000
+    },
+    {
+      "code": "ST0263",
+      "name": "SAMSUNG GALAXY S25 ULTRA 512GB SİYAH TÜRKİYE",
+      "imei": "354911397137027",
+      "price": 58000
     }
   ]
 }
