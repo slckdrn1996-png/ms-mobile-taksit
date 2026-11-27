@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-27T16:20:09.760143+03:00",
-  "updatedAtLabel": "27 Kasım 2026 16:20 (İstanbul)",
-  "count": 63,
+  "updatedAt": "2026-11-27T16:36:33.867589+03:00",
+  "updatedAtLabel": "27 Kasım 2026 16:36 (İstanbul)",
+  "count": 68,
   "products": [
     {
       "code": "ST0009",
@@ -304,6 +304,30 @@
       "price": 80000
     },
     {
+      "code": "ST0264",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "356800519576204",
+      "price": 150000
+    },
+    {
+      "code": "ST0266",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "356800519696788",
+      "price": 150000
+    },
+    {
+      "code": "ST0267",
+      "name": "İPHONE 18 PRO 256GB BORDO KAPALI KUTU AF",
+      "imei": "352378757189737",
+      "price": 135000
+    },
+    {
+      "code": "ST0270",
+      "name": "İPHONE 18 PRO 256GB BORDO KAPALI KUTU AF",
+      "imei": "352378757222389",
+      "price": 135000
+    },
+    {
       "code": "ST0042",
       "name": "APPLE ŞARJ KABLOSU",
       "imei": "",
@@ -380,6 +404,12 @@
       "name": "SAMSUNG GALAXY S25 ULTRA 512GB SİYAH TÜRKİYE",
       "imei": "354911397137027",
       "price": 58000
+    },
+    {
+      "code": "ST0268",
+      "name": "İPHONE 18 PRO 256GB MAVİ KAPALI KUTU AF",
+      "imei": "352378757790906",
+      "price": 135000
     }
   ]
 }
