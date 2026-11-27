@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-27T17:40:23.670235+03:00",
-  "updatedAtLabel": "27 Kasım 2026 17:40 (İstanbul)",
-  "count": 68,
+  "updatedAt": "2026-11-27T18:12:04.625916+03:00",
+  "updatedAtLabel": "27 Kasım 2026 18:12 (İstanbul)",
+  "count": 66,
   "products": [
     {
       "code": "ST0009",
@@ -100,12 +100,6 @@
       "price": 85000
     },
     {
-      "code": "ST0165",
-      "name": "İPHONE 15 PRO MAX 256GB NATUREL PİL 84",
-      "imei": "355458123114564",
-      "price": 70000
-    },
-    {
       "code": "ST0168",
       "name": "İPHONE 17 PRO MAX 256GB TURUNCU KAPALI KUTU AF",
       "imei": "358072808837485",
@@ -146,12 +140,6 @@
       "name": "İPHONE 18 PRO MAX 512GB MAVİ KAPALI KUTU MF",
       "imei": "358687532846542",
       "price": 167000
-    },
-    {
-      "code": "ST0194",
-      "name": "İPHONE 16 PRO MAX 512GB NATUREL 11 AY GARANTİLİ PİL 90",
-      "imei": "359296246538830",
-      "price": 92500
     },
     {
       "code": "ST0195",
