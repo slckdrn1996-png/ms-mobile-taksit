@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-27T12:11:41.274466+03:00",
-  "updatedAtLabel": "27 Kasım 2026 12:11 (İstanbul)",
-  "count": 67,
+  "updatedAt": "2026-11-27T12:44:27.484949+03:00",
+  "updatedAtLabel": "27 Kasım 2026 12:44 (İstanbul)",
+  "count": 64,
   "products": [
     {
       "code": "ST0009",
@@ -298,12 +298,6 @@
       "price": 40000
     },
     {
-      "code": "ST0259",
-      "name": "İPHONE 18 PRO MAX 256GB BORDO YURT DIŞI PİL 100 DEVİR 2",
-      "imei": "351139797996080",
-      "price": 77000
-    },
-    {
       "code": "ST0260",
       "name": "İPHONE 17 PRO MAX 256GB BEYAZ 19 AY GARANTİLİ PİL 100",
       "imei": "358361788043739",
@@ -320,12 +314,6 @@
       "name": "APPLE ŞARJ KABLOSU",
       "imei": "",
       "price": 1150
-    },
-    {
-      "code": "ST0077",
-      "name": "İPHONE 12 64GB MAVİ PİL 78",
-      "imei": "355772534245860",
-      "price": 16000
     },
     {
       "code": "ST0110",
@@ -380,12 +368,6 @@
       "name": "MACBOOK PRO M4 PRO 16 İNÇ",
       "imei": "",
       "price": 105000
-    },
-    {
-      "code": "ST0245",
-      "name": "SAMSUNG GALAXY S26 ULTRA 256GB SİYAH YURT DIŞI",
-      "imei": "359256150188808",
-      "price": 50000
     },
     {
       "code": "ST0253",
