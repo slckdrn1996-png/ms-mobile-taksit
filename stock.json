@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-28T09:47:54.220244+03:00",
-  "updatedAtLabel": "28 Kasım 2026 09:47 (İstanbul)",
-  "count": 66,
+  "updatedAt": "2026-11-28T10:21:06.313163+03:00",
+  "updatedAtLabel": "28 Kasım 2026 10:21 (İstanbul)",
+  "count": 68,
   "products": [
     {
       "code": "ST0009",
@@ -298,6 +298,12 @@
       "price": 150000
     },
     {
+      "code": "ST0265",
+      "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
+      "imei": "356800519560877",
+      "price": 150000
+    },
+    {
       "code": "ST0266",
       "name": "İPHONE 18 PRO MAX 256GB BORDO KAPALI KUTU AF",
       "imei": "356800519696788",
@@ -307,6 +313,12 @@
       "code": "ST0267",
       "name": "İPHONE 18 PRO 256GB BORDO KAPALI KUTU AF",
       "imei": "352378757189737",
+      "price": 135000
+    },
+    {
+      "code": "ST0269",
+      "name": "İPHONE 18 PRO 256GB MAVİ KAPALI KUTU AF",
+      "imei": "352378756832469",
       "price": 135000
     },
     {
