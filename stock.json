@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-28T16:15:36.904209+03:00",
-  "updatedAtLabel": "28 Kasım 2026 16:15 (İstanbul)",
-  "count": 67,
+  "updatedAt": "2026-11-28T16:40:54.795799+03:00",
+  "updatedAtLabel": "28 Kasım 2026 16:40 (İstanbul)",
+  "count": 66,
   "products": [
     {
       "code": "ST0009",
@@ -272,12 +272,6 @@
       "name": "İPHONE 15 128GB SİYAH 5 AY GARANTİLİ PİL 86",
       "imei": "351095813862344",
       "price": 40000
-    },
-    {
-      "code": "ST0260",
-      "name": "İPHONE 17 PRO MAX 256GB BEYAZ 19 AY GARANTİLİ PİL 100",
-      "imei": "358361788043739",
-      "price": 108000
     },
     {
       "code": "ST0261",
