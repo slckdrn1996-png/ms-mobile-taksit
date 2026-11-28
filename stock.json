@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-28T14:48:51.561676+03:00",
-  "updatedAtLabel": "28 Kasım 2026 14:48 (İstanbul)",
-  "count": 68,
+  "updatedAt": "2026-11-28T15:15:52.019900+03:00",
+  "updatedAtLabel": "28 Kasım 2026 15:15 (İstanbul)",
+  "count": 67,
   "products": [
     {
       "code": "ST0009",
@@ -368,12 +368,6 @@
       "name": "APPLE 20W ŞARJ BAŞLIĞI",
       "imei": "",
       "price": 1150
-    },
-    {
-      "code": "ST0209",
-      "name": "İPHONE 13 128GB BEYAZ PİL 81",
-      "imei": "356052833472377",
-      "price": 25000
     },
     {
       "code": "ST0244",
